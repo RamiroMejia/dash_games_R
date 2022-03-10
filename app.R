@@ -4,24 +4,25 @@ library(ggplot2)
 library(plotly)
 library(tidyr)
 library(lubridate)
+library(here)
+library(tidyverse)
 
 
-
-data <- utils::read.csv('data/vgsales.csv')
+data <- read_csv(here("data","vgsales.csv"))
 
 # pivoting data
 
 pivoted_data <- data %>%  tidyr::pivot_longer('NA_Sales':'Global_Sales',
-                                             names_to='region' , values_to='sales')
+                                              names_to='region' , values_to='sales')
 
 
 pivoted_data <- 
   pivoted_data %>%  dplyr::mutate(region = dplyr::case_when(region=='NA_Sales' ~ 'North America',
-                                                           region=='EU_Sales' ~ 'Europe',
-                                                           region=='JP_Sales' ~ 'Japan',
-                                                           region=='Other_Sales' ~ 'Rest of the World',
-                                                           region=='Global_Sales' ~ 'Global'),
-                                 Year = lubridate::year(lubridate::as_date(Year, format="%Y" ))
+                                                            region=='EU_Sales' ~ 'Europe',
+                                                            region=='JP_Sales' ~ 'Japan',
+                                                            region=='Other_Sales' ~ 'Rest of the World',
+                                                            region=='Global_Sales' ~ 'Global'),
+                                  Year = lubridate::year(lubridate::as_date(Year, format="%Y" ))
   )
 
 
